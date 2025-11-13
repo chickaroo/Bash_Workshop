@@ -1,8 +1,6 @@
 # Commmand Line Exercise
 
-Working in the command line can seem daunting at first, but these exercises are designed to get you comfortable with the environment. You'll only get better if you practice and spend time with it! 
-
-Work through these exercises in your own command line. If you want, you can make a separate file to note down things you learn or any questions you have.
+Working in the command line can seem daunting at first, but this workshop is designed to get you comfortable with the environment. Work through these exercises in your own command line. If you want, you can make a separate file to note down things you learn or any questions you have.
 
 -----
 
@@ -12,19 +10,22 @@ Work through these exercises in your own command line. If you want, you can make
 
 The shell separates commands and arguments based on whitespace.
 
-1.  Create a directory named `bash_workshop` and navigate into it. (Make sure you understand where this directory is within your general directory structure!)
-2. Move inside this directory using the `cd` command. 
-3.  Run the `ls` command to observe the initial directory state.
-4.  Use the `touch` command to create three files named `alvin`, `theodor`, and `simon` in a single command, ensuring there are different amounts of space (one, two, or more) between the arguments.
+1.  Create a directory named `bash_workshop` using the `mkdir` command and navigate into it using the `cd` command. (Make sure you understand where this directory is within your general directory structure!)
+3.  Run the `ls` command to observe the initial directory state. What do you observe? 
+4.  Use the `touch` command to create three files named `chipmunk1`, `chipmunk2`, and `chipmunk3` in a single command, ensuring there are different amounts of space (one, two, or more) between the arguments.
 5.  Run `ls` again to confirm the files were created correctly.
 6.  **Reflect:** Did the varying amount of whitespace between the filenames affect how `touch` interpreted the arguments?
 
-### Exercise 1.2: Globbing and Argument Separation
+### Exercise 1.2: Globbing and Flag Usage
 
 A **glob** (like `*`) is a pattern that the shell expands into a list of filenames before the command executes.
 
+Globbing is the process by which the shell expands these patterns into a list of matching file or directory names before the command is executed.
+
+For example, you could list all the files of type `.csv` using the command `ls *.txt`. 
+
 1.  Use a single `rm` command with a glob to delete all files in your current directory.
-2. List the contents of your directory to see what `rm` did.
+2. List the contents of your directory to see what `rm` did. Did the glob work how you expected to? 
 
 
 ### Exercise 1.3: Quoting to Group Arguments
@@ -43,6 +44,7 @@ When arguments contain spaces, they must be quoted to be treated as a single uni
 Working with files that contain spaces can be dangerous if quoting is omitted.
 
 1.  Create a file named `Important File.txt` and a second file named `secret`.
+**Tip:** It's always a good idea to double check where you are in your file system before altering files/directories. Double check that you are still in the `bash_workshop` directory we created earlier!
 2.  **Dangerous Test:** Attempt to delete only `My Important File.txt` **without** surrounding the filename in quotes.
 3.  Run `ls` to see which files remain.
 4.  **Fix:** Now, delete the remaining file correctly by using **double quotes** around its filename.
@@ -50,13 +52,11 @@ Working with files that contain spaces can be dangerous if quoting is omitted.
 
 -----
 
-## Part 2: Strings
+## Part 2: Moving Around Directories
 
-### Exercise 2.1: Strings in Command Execution
+### Exercise 2: Get Comfortable Moving Around in the Command Line
 
-In Bash, almost everything is treated as a string.
-
-1.  Create a text file named `set_list` using an editor with the following content (on separate lines):
+1.  Create a text file named `setlist.txt` using an editor with the following content (on separate lines):
 
     ```text
     You Spin Me Round
@@ -64,27 +64,40 @@ In Bash, almost everything is treated as a string.
     The Chipmunk Song
     ```
 
-**Tip:** use nano, a simple editor built in to your command line. 
+**Tip:** use nano, a simple editor built in to your command line, by using the command `nano setlist.txt`. Remember, to save and exit in nano, press Ctrl+O (Write Out) and then Ctrl+X (Exit).
 
 **Challenge:** use Vim as your editor instead! 
 
-2.  Run the command `cat set_list`.
+2.  Run the command `ls` to check your work. You can further use `cat setlist.txt` to see the contents of the file to see that its contents were created properly. 
 
-3.  **Reflect:**
+3. You now need to make an organized directory system for the upcoming tour. Make a new directory called `songs` and navigate inside it. 
 
-      * We typed a command: `cat set_list`. The shell reads this command as a string, and then divides it into the substrings `cat` and `set_list`. As far as the shell is concerned, `set_list` has no meaning, it's just a string with eight characters in it. `cat` receives the argument `set_list`, which is a string of a filename. The string `set_list` has become meaningful because of how it was used.
+4. Create the files `song1.mp3` `song2.mp3`. You can do this all in one line!
 
-      * The file happens to contain some text, which we see on our terminal. The entire file content — taken as a whole — is a string, but that string is not meaningful. However, if we divide the file into lines (and therefore treat each line as a separate string), then we see each individual line has meaning.
+5. You want to send `song1.mp3` to a friend but forgot where the file is located! Use `pwd` to help see where you are in your file system. 
 
-      * We can divide the final line into words, but these words are not meaningful by themselves. We don't know the song "Chipmunk". Dividing the lines into words is not a useful thing to do in this example. But the shell doesn't know any of this — only we do!
+6. Use `cd ..` to navigate back to your parent directory. 
 
-4. Let's practice moving around in the command line efficiently with strings: 
-    * Make a new directory called `songs` and navigate instide it. 
-    * Create the files `song1.mp3` `song2.mp3` `lyrics1.txt` `lyrics2.txt`. You can do this all in one line!
-    * You want to send `song1.mp3` to a friend but forgot where the file is to attach to an email. Use `pwd` to help see where you are. 
-    * Use `cd ..` to navigate back to your parent directory. 
-    * You realize you hate song 2 and want to remove it. Use `rm` to delete `song2.mp3` and `lyrics2.txt` inside the `songs` directory. Use relative paths here, and remember that using tab autocomplete will make your life much easier! 
-    * Check your work with `ls`. 
+7. You forgot to upload `song4.mp3`! You are a bit lazy and know you just used a command to navigate inside the `songs` directory. Use the up arrow multiple times to see your most recently used commands. Can you retrieve the command you used to navigate inside the `songs` directory? Once you have, press enter to use it. Handy, right? 
+
+8. You are now inside the `songs` directory, so create the file `song4.mp3` here. (Use the up arrow again to save time!)
+
+9. Now, we need to add lyrics for the artists who tend to be a bit forgetful. Create a directory inside the `songs` directory called `lyrics` and navigate inside it, then create the file `lyrics.txt`. 
+
+10. Ok, but now you need to go back to the set list and add song 4! The lazyness continues: you know the set list file is in the directory you were just in previously, so use `cd -` to navigate to the **previous** (NOT parent!) directory. 
+
+11. **Reflect:** Do you understand the difference here between the **previous** directory and the **parent** directory? Make sure you can explain this difference to your neighbors before moving on! 
+
+12. You want to add the name of song 4 to the list of songs inside the set list file. Add the song name "Party Rock Anthem" to the last line of the set list file, making sure to save the conents. 
+
+**Tip:** You can use the nano editor here again. 
+
+**Challenge:** See if you can add the song name to the file with one line in the command line using `echo` and output redirection (Make sure to use `>>`, the append operator!). 
+
+13. You realize you don't like song 2 and want to remove it. Use `rm` to delete `song2.mp3` inside the `songs` directory. You are too lazy to move inside the `songs` directory again, so use **relative paths** here (and remember that using tab autocomplete can help you continue to be lazy and save effort typing)! 
+**Hint:** I can remove a file inside directory B while being inside its parent directory A by typing the command `rm B/new_file`. 
+
+14. **Reflect:** Were you checking your work with `ls` along the way? It's always a good idea to do so periodically, especially when modifying files/directories! 
 
 -----
 
@@ -103,16 +116,24 @@ Many Bash builtins have their own internal documentation accessible via the `hel
 2.  Use the `help` command on the `for` keyword (try to locate the structure for a simple `for` loop).
 3.  **Contrast:** Now try to run `help ls`. What is the output, and why did this command fail to provide help documentation?
 
+### Exercise 3.2: Command Built-In Help (`--help` flag)
+
+Many bash commands have a help page built-in via the `--help` (often shortened to `-h`) flag. 
+
+1. Use the `--help` flag after the command `grep`. What information does this output tell you? Is it a comprehensive explanation of what the command actually does? 
+2. Now, try using the `--help` flag after the command `rm`. What is different about this output? 
+The `--help` flag is an optional addition to a command, and thus not all commands have a `--help` flag! It's a quick way to see an overview of the flag usage of a command, given the command supports that output. 
+
 ### Exercise 3.2: External Command Documentation (`man`)
 
-Executable applications (like `ls` or `grep`) use the `man` (manual) pages.
+How do we then get comprehensive information about what `grep` and `rm` do? Executable applications (like `ls`, `rm`, or `grep`) use the `man` (manual) pages.
 
 1.  View the manual page for the `ls` command:
     ```bash
     man ls
     ```
 2.  Scroll down and locate the descriptions for the `-l` and `-a` options. (Press `q` to quit the manual page viewer).
-3.  **Challenge:** Use the `man` page to find out which command is used to display the contents of a file (like `cat` or `less`).
+3.  **Challenge:** Use the `man` page to find out what the `grep` command actually does. 
 
 -----
 
@@ -122,26 +143,89 @@ Understanding file permissions is critical for security and script execution.
 
 ### Exercise 4.1: Interpreting `ls -la` Output
 
-The command `ls -la` (long listing, all files) provides detailed information about files, including permissions.
+## Understanding and Changing File Permissions
 
-1.  Run `ls -la` in your `bash_workshop` directory. Focus on the very first column of the output.
-2.  **Decode:** This 10-character string represents the file type and permissions.
-      * The first character (`-`, `d`, or `l`) is the file **type** (`-` for file, `d` for directory, `l` for link).
-      * The next nine characters are permission triplets: **User** (owner), **Group**, and **Other** (everyone else).
-3.  **Identify:** What are the permissions for the `set_list` file (read as three groups of `rwx`)?
+The command line gives you fine-grained control over who can **read**, **write**, and **execute** your files. This control is managed by **permissions**.
+
+### Exercise 4.1: Decoding File Permissions (`ls -la`)
+
+1.  Run the **long listing** command:
+    ```bash
+    ls -la
+    ```
+2.  **Focus on the very first column** of the output. This 10-character string tells you everything about the file's permissions and type.
+
+| Character Position | Meaning | Example |
+| :---: | :--- | :---: |
+| **1** | **File Type** | **d** (directory), **-** (file), or **l** (link) |
+| **2-4** | **Owner/User** Permissions | **rwx** (Read, Write, Execute) |
+| **5-7** | **Group** Permissions | **r-x** (Read, Execute, no Write) |
+| **8-10** | **Other/World** Permissions | **r--** (Read only) |
+
+The permission characters are:
+
+  * **r** = **Read** (view file contents, list directory contents)
+  * **w** = **Write** (modify or delete the file, create/delete files in a directory)
+  * **x** = **Execute** (run the file as a program, enter a directory)
+  * **-** = Permission denied
+
+<!-- end list -->
+
+3.  **Decode:** Look at the permissions for the `setlist.txt` file. For example, if you see:
+
+    $$\text{-rw-r--r--}$$
+
+      * The **User** (owner) has: **r w -** (Read and Write).
+      * The **Group** has: **r - -** (Read only).
+      * The **Other** has: **r - -** (Read only).
+
+4.  **Identify:** What are the permissions for the `setlist.txt` file on your system (read as three groups of `rwx`)?
+
+-----
 
 ### Exercise 4.2: Changing Permissions with Symbolic Mode (`chmod`)
 
-Symbolic mode uses characters to specify *who* (`u`=user, `g`=group, `o`=other, `a`=all) gets *what* permission (`+`=add, `-`=remove, `=`=set) for *which* permission type (`r`, `w`, `x`).
+The **`chmod`** (change mode) command is used to alter file permissions. We'll use **Symbolic Mode**, which uses intuitive characters to specify changes.
 
-1.  Create a dummy script file: `touch test_script.sh`.
-2.  Remove all write permissions for the group and others:
+The syntax is: `chmod WHO OPERATION PERMISSION FILE`
+
+| WHO | OPERATION | PERMISSION |
+| :---: | :---: | :---: |
+| **u** (User/Owner) | **+** (Add permission) | **r** (Read) |
+| **g** (Group) | **-** (Remove permission) | **w** (Write) |
+| **o** (Other/World) | **=** (Set permission exactly) | **x** (Execute) |
+| **a** (All: u, g, and o) | | |
+
+1.  Create a dummy script file:
+
+    ```bash
+    touch test_script.sh
+    ```
+
+2.  Run `ls -l test_script.sh` to see its default permissions (likely `-rw-rw-r--`).
+
+3.  **Remove all write permissions for the group and others:**
+
     ```bash
     chmod go-w test_script.sh
     ```
-3.  Grant executable permission only to the user (owner), using the information above to figure out the correct symbols.  
 
-4.  Run `ls -l test_script.sh` and verify the permissions string matches `-rwx r-- ---`. (The group/other read permissions might vary, but the `u+x` should be present.)
+      * **go**: affects the **G**roup and **O**ther.
+      * **-**: **removes** the following permission.
+      * **w**: the **Write** permission.
+
+4.  **Grant executable permission only to the user (owner):** You want to affect the **user** (`u`), **add** (`+`) the **execute** (`x`) permission.
+
+    ```bash
+    # Type the command here:
+    chmod u+x test_script.sh
+    ```
+
+5.  Run `ls -l test_script.sh` and verify the permissions string. It should now start with `-rwx` for the owner, and the permissions for group and others should be `-r--r--` (or something close to this, with no write permissions).
+
+      * If you started with `-rw-rw-r--`, your final permissions should be: **`-rwx r-- r--`** (or just `-rwxr--r--`).
+
+## Bonus Challenges 
 
 ### Exercise 4.3: Changing Permissions with Octal Mode (`chmod`)
 

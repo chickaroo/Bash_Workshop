@@ -1,132 +1,221 @@
 # Bash Scripting Exercise
 
-# WIP!!!
+In this section, we will use bash scripts to automating a common task: downloading and analyzing protein sequences.
 
-This section focuses on writing self-contained shell scripts and introducing fundamental programming constructs.
+## Building a Protein FASTA Downloader
 
-### Exercise 4.1: Script Setup and Data Download
+### Part 1: Create and Initialize the Script
 
-Every script needs a shebang line and executable permission. We will also use the `wget` command, an executable, to download external data.
+Create and open a new file named `prot_seq_tool.sh` using your text editor in the command line:
 
-1.  Create a new script file named `fasta_processor.sh`.
-2.  Place the recommended shebang at the top:
-    ```bash
-    #!/usr/bin/env bash
-    ```
-3.  Inside the script, add the following lines to define the URL and download the data:
-    ```bash
-    # Variable holding the URL for a small FASTA protein sequence file (P0DPF8)
-    FASTA_URL="https://www.uniprot.org/uniprot/P0DPF8.fasta"
-    # Use wget to download the file into the current directory
-    wget -q "$FASTA_URL" -O protein_data.fasta
-    ```
-4.  Save the script. Give it executable permission: `chmod +x fasta_processor.sh`.
-5.  Execute the script (`./fasta_processor.sh`) and confirm that a file named `protein_data.fasta` was created silently.
+Add the Shebang: The very first line of any Bash script is the Shebang (`#!`). It tells your operating system which program to use to execute the rest of the file (in our case, the bash shell). This line is mandatory for a script to run correctly.
 
-### Exercise 4.2: Positional Parameters and Argument Checking
+Add this line to the very top of `prot_seq_tool.sh`:
 
-Positional parameters (`$1`, `$2`, etc.) hold the arguments passed to your script. `$#` holds the total number of arguments.
+```bash
+#!/usr/bin/env bash
+```
 
-1.  Modify `fasta_processor.sh` to check if the user provided *exactly one* argument (which will be the line number to print). Place this logic **before** the `wget` command.
+We need to make sure our script is executable, which means that we can run the script. To do this, save and exit the editor, then change the permissions of the script file so that the user can execute the file: `chmod u+x prot_seq_tool.sh`
 
-2.  Add a check using an `if` statement for error handling and a usage message:
 
-    ```bash
-    # Check if the number of arguments ($#) is not equal to 1
-    if [[ $# -ne 1 ]]; then
-      echo "Error: Please provide exactly one argument (the line number)." >&2
-      echo "Usage: $0 <line_number>" >&2 # $0 is the script's name
-      exit 1
-    fi
+### Part 2: Accepting Input and Defining Variables
 
-    # ... rest of the script (wget command) ...
-    ```
+We want our script to be flexible: it should work for any protein ID we give it. We do this by accepting command-line arguments.
 
-3.  Run the script with:
+**Variables:** In Bash, variables are denoted with the `$` symbol. For example, we can have a simple script that prints the value of a variable: 
 
-      * No arguments (`./fasta_processor.sh`).
-      * Two arguments (`./fasta_processor.sh 1 2`).
-      * One argument (`./fasta_processor.sh 2`). (It should now continue past the check).
+```bash
+#!/usr/bin/env bash
 
-### Exercise 4.3: Processing Data with a `for` Loop
+VAR1="Comp Bio Soc"
 
-The `for` loop is ideal for iterating over a list of items.
+echo $VAR1
+```
+**Note:** there are no spaces when declaring variables! Bash syntax does not accept `VAR1 = "Comp Bio Soc"`. 
 
-1.  **Challenge:** Use a `for` loop to iterate over the contents of `protein_data.fasta` and print only the header line (which starts with `>`).
+We can embedd our variables within strings to use them flexibly with `{}` operators. For example, 
 
-2.  Inside your `fasta_processor.sh` script, add this *incorrect but common* loop structure **after** the `wget` command:
+```bash
+#!/usr/bin/env bash
 
-    ```bash
-    echo "--- Processing with simple for loop (Vulnerable to Word Splitting) ---"
+VAR1="Comp Bio Soc"
 
-    # NOTE: This is a poor pattern for reading files, as it splits lines on ALL
-    # whitespace, not just newlines. If a line had a space, it would be treated
-    # as multiple items.
-    for line in $(cat protein_data.fasta); do
-      if [[ "$line" == ">"* ]]; then
-        echo "HEADER FOUND: $line"
-      fi
-    done
-    ```
+echo "Welcome to ${VAR1}s workshop"
+```
 
-3.  Execute the script with one argument (`./fasta_processor.sh 2`).
+**Test:** Save the above code in your script and try to run the script by using the bash command: `bash prot_seq_tool.sh`. Try to run the script again after removing the `{}` operators. Why is it important to use these operators? 
 
-4.  **Observe:** Did the header print correctly? Look at the sequence lines—if they contained spaces, they would be split and processed as separate "lines," highlighting a fundamental flaw of this `for` loop structure for file processing.
+### Part 3: Arguments 
 
-### Exercise 4.4: Robust Processing with a `while` Loop
+Define Variables: In Bash, arguments passed when running the script are stored automatically in variables like $1 (first argument), $2 (second argument), etc. We will use the first argument ($1) for our protein ID.
 
-The `while read` loop is the standard, robust method for processing a file line-by-line, as it correctly handles spaces within lines.
+For example, you can define variables as the arguments of a script like this: 
 
-1.  Comment out the previous `for` loop block in your script.
+```bash
+#!/usr/bin/env bash
 
-2.  Replace it with the following robust `while` loop structure:
+VAR1="$1"
+VAR2="$2"
+```
 
-    ```bash
-    echo "--- Processing with robust while loop (Correct Line Reading) ---"
+Use this example to define the variable `PROTEIN_ID` as the first argument your script accepts. 
 
-    # The IFS= ensures internal field separator (splitting) only happens on
-    # newlines, not spaces.
-    # The read -r prevents backslashes from being interpreted (Raw input).
-    LINE_COUNT=0
-    TARGET_LINE="$1" # Use the positional parameter passed to the script
+### Part 4: Download the FASTA file from UniProt
 
-    while IFS= read -r line; do
-      # Increment the counter
-      LINE_COUNT=$((LINE_COUNT + 1))
+We can use the command `wget` to download a file from the internet and sive it to your local machine. If you'd like, you can use `man` to see a more detailed description of what `wget` does. 
 
-      # Use an if statement to check if the current line number matches the target
-      if [[ $LINE_COUNT -eq $TARGET_LINE ]]; then
-        echo "Target Line ($TARGET_LINE) Content: $line"
-        break # Stop reading once the line is found
-      fi
+The URL to download e.g. the protein sequence for human hemoglobin subunit beta is https://rest.uniprot.org/uniprotkb/P68871.fasta. 
 
-    done < protein_data.fasta # Pipe the file content into the loop
-    ```
+**Do it yourself:** Write a bash command in your script using `wget` to download any given protein from Uniprot. Remember, we can embed variables in a string using the `"Welcome to ${VAR1}s workshop"` syntax. 
 
-3.  Execute the script, targeting the second line (which is usually the start of the sequence): `./fasta_processor.sh 2`.
 
-4.  **Reflect:** The `while IFS= read -r line` pattern prevents word splitting and backslash interpretation. Why are these protections (`IFS=` and `-r`) critical for reliable file processing in Bash?
+**Test the Download:** Run the script with the human P53 tumor suppressor protein ID (P04637):
 
-### Exercise 4.5: Cleaning Up with Conditional Logic
+```bash
+bash prot_seq_tool.sh P04637
+```
 
-It's good practice to clean up temporary files created by a script.
+Check your work with `ls`! A file called P04637.fasta should now be in your directory.
 
-1.  Add a final `if` statement to your `fasta_processor.sh` script to check if the file `protein_data.fasta` exists, and if it does, delete it.
-    ```bash
-    # Cleanup section
-    if [[ -f protein_data.fasta ]]; then
-      rm protein_data.fasta
-      echo "Cleanup successful."
-    fi
-    ```
-2.  Run the complete script one last time with a valid argument (`./fasta_processor.sh 3`).
-3.  **Confirm:** The script should execute, print the usage message if no argument is given, download the file, process the third line, and then delete the file before exiting.
-4.  Run `ls` to ensure the file is gone.
+If you want, you can inspect the contents of this FASTA file using commands like `cat` or `head`. 
 
------
+### Part 5: Amino Acid Composition
 
-That concludes the restructured workshop guide\! Let me know if you'd like to dive deeper into any of these concepts, like writing functions or handling command-line options.
+Now it's starting to get more complex! We want to read the downloaded FASTA file and automatically output some key aspects our sequence, like the sequence length. 
 
-http://googleusercontent.com/immersive_entry_chip/0
+First, let's introduce some Bash tools that you may need in the following exercises. 
 
-I'm glad you liked the direction\! This new, expanded Part 4 should give you excellent practice with essential Bash scripting control flow and best practices for file handling. Let me know if you would like to explore functions or more complex regular expressions next\!
+**While loop:**
+
+``` bash
+
+counter=1
+
+while [[ $counter -le 5 ]]; do
+    echo "Count: $counter"
+    ((counter++))
+done
+
+```
+
+`while [[ condition ]]` checks if the condition is true
+`do` marks the start of the code that repeats
+The code inside runs over and over as long as the condition is true
+`done` marks the end of the loop
+`-le` means "less than or equal to"
+`((counter++))` adds 1 to counter
+
+Use a while loop to read a file line by line: 
+
+``` bash
+while read -r line; do
+    echo "Line: $line"
+done < filename.txt
+```
+
+Can you find out what the `-r` does? 
+
+**If-Statements:**
+
+``` bash
+
+if [[ condition ]]; then
+    # code if true
+else
+    # code if false
+fi
+
+```
+
+Hint: `[[ $line == ">"* ]]` checks if a line starts with the character ">". 
+
+
+**Length of a string:**
+
+``` bash
+
+string_length=${#my_string}
+
+```
+**For-loop:**
+
+``` bash
+for (( i=0; i<10; i++ )); do
+    echo $i
+done
+```
+
+**Simple Arrays:**
+
+``` bash
+fruits=("apple" "banana" "cherry") # Method 1: create with values
+
+# Method 2: Create empty and add items
+animals=()
+animals[0]="cat"
+animals[1]="dog"
+animals[2]="bird"
+
+echo ${fruits[0]}    # Prints the 0th element of the array: "apple"
+echo ${#fruits[@]}    # Prints the length of the array: "3"
+
+# loop through the array
+for (( i=0; i<${#fruits[@]}; i++ )); do
+    echo "${fruits[$i]}"
+done
+
+# for-each loop
+for fruit in "${fruits[@]}"; do
+    echo "$fruit"
+done
+
+```
+
+
+### Exercise 5.1: 
+
+1. Print only the header of the FASTA file. 
+2. Print the length of the sequence. Make sure your outputs are understandable, like `sequence_length: 11`
+3. Add another argument to accept a specific amino acid character and output how many times that amino acid occurs in the sequence. 
+4. **Challenge:** Output the amino acid composition of the sequence, i.e. the number of occurences of each amino acid in the sequence. Think about using arrays; you may have to use more than one! 
+
+**Note:** We have not covered more detailed elements of bash scripts like error handling and debugging output. If you'd like, extend your script to handle inputs that aren't in the expected format. 
+
+**Next Note:** Bash was never intended to be a complex programming language, rather it is there to help you automate command line workflows. If you find yourself coding complex logical algorithms in Bash, it's probably time to switch to a higher level language like Python. 
+
+### Optional Part 6: Explore an Alternative Solution to Amino Acid Composition using Bash Commands and the Pipe (`|`)
+
+Instead of using complex loops, we will use an idiomatic Bash pipeline—a series of commands connected by the pipe symbol (|). This is fast and powerful!
+
+Analyze the FASTA: Open bio_tool.sh again (nano bio_tool.sh) and add the following lines after the wget command:
+
+``` bash
+echo ""
+echo "--- Amino Acid Composition (Pipeline Method) ---"
+
+# 1. Use 'grep -v' to filter out the header line (starts with '>')
+# 2. Use 'tr -d' to remove all newline characters (creating one long string)
+SEQUENCE=$(grep -v '>' "${OUTPUT_FILE}" | tr -d '\n')
+
+# 3. Process the sequence for counting:
+echo "$SEQUENCE" | \
+fold -w 1 | \
+sort | \
+uniq -c | \
+awk '{print $2 ": " $1}'
+```
+
+What's happening in the pipeline?
+
+`echo "$SEQUENCE" |`: Takes the long protein string and passes it to the next command.
+
+`fold -w 1 |`: Splits the string, putting each character on a new line.
+
+`sort |`: Puts all the A's together, C's together, etc.
+
+`uniq -c |`: Counts how many consecutive identical lines (characters) there are.
+
+`awk '{print $2 ": " $1}'`: Formats the final output nicely.
+
+Well that is a nice and short script, right? Being familiar with Bash commands can indeed make your life that much easier. 

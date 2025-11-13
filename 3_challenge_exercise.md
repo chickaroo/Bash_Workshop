@@ -6,9 +6,13 @@
 Remember, given a DNA strand, its transcribed RNA strand is formed by replacing each nucleotide with its complement:
 
 G -> C
+
 C -> G
+
 T -> A
+
 A -> U
+
 
 3. Alter your script so it writes the RNA complement output to a given output file.
 

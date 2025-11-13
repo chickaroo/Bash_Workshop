@@ -186,9 +186,16 @@ done
 
 ### Optional Part 6: Explore an Alternative Solution to Amino Acid Composition using Bash Commands and the Pipe (`|`)
 
-Instead of using complex loops, we will use an idiomatic Bash pipeline—a series of commands connected by the pipe symbol (|). This is fast and powerful!
+Instead of using complex loops, we will use a series of commands connected by the pipe symbol (|). This is fast and powerful, and can be simpler to use if you understand the commands well. 
 
-Analyze the FASTA: Open bio_tool.sh again (nano bio_tool.sh) and add the following lines after the wget command:
+If you want to try to solve this yourself, do not scroll below this line! I've provided a solution and a breakdown of what each command is doing below. 
+
+Hint: You'll need commands we haven't used before here. Google is your friend! 
+
+
+------------
+
+
 
 ``` bash
 echo ""

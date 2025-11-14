@@ -226,3 +226,9 @@ What's happening in the pipeline?
 `awk '{print $2 ": " $1}'`: Formats the final output nicely.
 
 Well that is a nice and short script, right? Being familiar with Bash commands can indeed make your life that much easier. 
+
+
+TODO: 
+
+Add How to Install WSL for Windows
+Add Intro to HPC Resources

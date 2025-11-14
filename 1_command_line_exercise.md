@@ -10,11 +10,11 @@ Working in the command line can seem daunting at first, but this workshop is des
 
 The shell separates commands and arguments based on whitespace.
 
-1.  Create a directory named `bash_workshop` using the `mkdir` command and navigate into it using the `cd` command. (Make sure you understand where this directory is within your general directory structure!)
+1.  Create a directory named `bash_workshop` using the `mkdir` command and **navigate inside this new directory using the `cd` command**. (Make sure you understand where this directory is within your general directory structure!)
 3.  Run the `ls` command to observe the initial directory state. What do you observe? 
-4.  Use the `touch` command to create three files named `chipmunk1`, `chipmunk2`, and `chipmunk3` in a single command, ensuring there are different amounts of space (one, two, or more) between the arguments.
+4.  Use the `touch` command to create three files named `chipmunk1.txt`, `chipmunk2.txt`, and `chipmunk3.csv` in a single command, ensuring to separate each argument (file name) with a whitespace. Watch the file endings here! 
 5.  Run `ls` again to confirm the files were created correctly.
-6.  **Reflect:** Did the varying amount of whitespace between the filenames affect how `touch` interpreted the arguments?
+6.  **Reflect:** Can you try to now make three different new files, this time separating them with varying numbers of white space? (e.g. `touch file1.txt             file2.txt`). Did the varying amount of whitespace between the filenames affect how `touch` interpreted the arguments? What does this mean for us when working with white spaces in the command line? 
 
 ### Exercise 1.2: Globbing and Flag Usage
 
@@ -22,9 +22,10 @@ A **glob** (like `*`) is a pattern that the shell expands into a list of filenam
 
 Globbing is the process by which the shell expands these patterns into a list of matching file or directory names before the command is executed.
 
-For example, you could list all the files of type `.csv` using the command `ls *.txt`. 
+For example, you could list all the files of type `.csv` using the command `ls *.csv` (If you try this in your `bash_workshop` directory now, you should see only the `chipmunk3.csv` file we have created!). 
 
-1.  Use a single `rm` command with a glob to delete all files in your current directory.
+1.  Use a single `rm` command with a glob to delete all the files of type `.txt` in your current directory.
+**Hint:** You can delete all files of type `.txt` with the command `rm *.txt`. 
 2. List the contents of your directory to see what `rm` did. Did the glob work how you expected to? 
 
 
@@ -37,7 +38,8 @@ When arguments contain spaces, they must be quoted to be treated as a single uni
     echo alvin        and          the chipmunks.
     ```
 2.  Use the `echo` command again, but this time, wrap the entire sentence in **double quotes** (`"`).
-3.  **Reflect:** In both cases, how many arguments did the `echo` command receive? What is the practical difference in the output? What is important to remember when working with strings that contain whitespaces? 
+3.  **Reflect:** In both cases, how many arguments did the `echo` command receive? What is the practical difference in the output? What is important to remember when working with strings that contain whitespaces?
+ 
 
 ### Exercise 1.4: Handling Filenames with Spaces
 
@@ -49,6 +51,8 @@ Working with files that contain spaces can be dangerous if quoting is omitted.
 3.  Run `ls` to see which files remain.
 4.  **Fix:** Now, delete the remaining file correctly by using **double quotes** around its filename.
 5. **Reflect:** How should we deal with files containing whitespaces? Do you think naming files with whitespaces is a good idea when working in the command line? 
+
+**Note:** What I want you to understand here is that the **number** of white spaces does not matter, the command line will always separate arguments by a singular white space. Why is this important? Often when working in graphical interfaces, we encounter file with a white space in their names, e.g. `CV Imperial 2025`. These types of file names containing white spaces are an absolute no-go when working in the command line, because if you forget to wrap them in `""` each time (which is frankly easy to do on accident), they will be interpreted as three separate files: `CV` and `Imperial` and `2025`. The best practice when naming files in the command line is to use underscores, capital letters, or dashes to miminic white spaces in file names, for example, you could name that file `CV_Imperial_2025` instead and save yourself a headache later on! 
 
 -----
 
@@ -105,18 +109,7 @@ Working with files that contain spaces can be dangerous if quoting is omitted.
 
 Knowing how to find documentation is often more valuable than memorizing every option.
 
-### Exercise 3.1: Internal Command Documentation (`help`)
-
-Many Bash builtins have their own internal documentation accessible via the `help` command.
-
-1.  Use the `help` command on the `type` builtin:
-    ```bash
-    help type
-    ```
-2.  Use the `help` command on the `for` keyword (try to locate the structure for a simple `for` loop).
-3.  **Contrast:** Now try to run `help ls`. What is the output, and why did this command fail to provide help documentation?
-
-### Exercise 3.2: Command Built-In Help (`--help` flag)
+### Exercise 3.1: Command Built-In Help (`--help` flag)
 
 Many bash commands have a help page built-in via the `--help` (often shortened to `-h`) flag. 
 
@@ -133,7 +126,9 @@ How do we then get comprehensive information about what `grep` and `rm` do? Exec
     man ls
     ```
 2.  Scroll down and locate the descriptions for the `-l` and `-a` options. (Press `q` to quit the manual page viewer).
-3.  **Challenge:** Use the `man` page to find out what the `grep` command actually does. 
+3.  **Challenge:** Use the `man` page to find out what the `grep` command actually does.
+
+**Note:** The `man` command may not work if you are working inside a Git Bash terminal. This is because while it provides a simple Linux based terminal, it's not a full replicate. If you'd like to work inside an actual Linux terminal on a Windows, I suggest taking the time to install a WSL (Windows Subsystem for Linux) instead. 
 
 -----
 

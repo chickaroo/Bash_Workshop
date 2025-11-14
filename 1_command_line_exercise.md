@@ -10,6 +10,8 @@ Working in the command line can seem daunting at first, but this workshop is des
 
 The shell separates commands and arguments based on whitespace.
 
+First, open your terminal (or Git Bash terminal, or WSL terminal). Everything outlined here you will execute in your own terminal, so make sure you are in a directory where you are comfortable adding new files/directories!
+
 1.  Create a directory named `bash_workshop` using the `mkdir` command and **navigate inside this new directory using the `cd` command**. (Make sure you understand where this directory is within your general directory structure!)
 3.  Run the `ls` command to observe the initial directory state. What do you observe? 
 4.  Use the `touch` command to create three files named `chipmunk1.txt`, `chipmunk2.txt`, and `chipmunk3.csv` in a single command, ensuring to separate each argument (file name) with a whitespace. Watch the file endings here! 

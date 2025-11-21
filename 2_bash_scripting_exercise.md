@@ -6,17 +6,19 @@ In this section, we will use bash scripts to automating a common task: downloadi
 
 ### Part 1: Create and Initialize the Script
 
-Create and open a new file named `prot_seq_tool.sh` using your text editor in the command line:
+Create and open a new file named `bash_intro.sh` using your text editor in the command line. 
 
 Add the Shebang: The very first line of any Bash script is the Shebang (`#!`). It tells your operating system which program to use to execute the rest of the file (in our case, the bash shell). This line is mandatory for a script to run correctly.
 
-Add this line to the very top of `prot_seq_tool.sh`:
+Add this line to the very top of `bash_intro.sh`:
 
 ```bash
 #!/usr/bin/env bash
 ```
 
-We need to make sure our script is executable, which means that we can run the script. To do this, save and exit the editor, then change the permissions of the script file so that the user can execute the file: `chmod u+x prot_seq_tool.sh`
+We need to make sure our script is executable, which means that we can run the script. To do this, save and exit the editor, then change the permissions of the script file so that the user can execute the file: `chmod u+x bash_intro.sh`
+
+**Tip:** If you are using Nano, save the file with `Ctrl+O`, then press `Enter` to confirm, and then exit the editor by pressing `Ctrl+X`. 
 
 
 ### Part 2: Accepting Input and Defining Variables
@@ -44,36 +46,42 @@ VAR1="Comp Bio Soc"
 echo "Welcome to ${VAR1}s workshop"
 ```
 
-**Test:** Save the above code in your script and try to run the script by using the bash command: `bash prot_seq_tool.sh`. Try to run the script again after removing the `{}` operators. Why is it important to use these operators? 
+**Test:** Save the above code in your script and try to run the script by using the bash command: `bash bash_intro.sh`. Try to run the script again after removing the `{}` operators. Why is it important to use these operators? 
 
 ### Part 3: Arguments 
 
-Define Variables: In Bash, arguments passed when running the script are stored automatically in variables like $1 (first argument), $2 (second argument), etc. We will use the first argument ($1) for our protein ID.
+In shell scripting, arguments are values that are passed to a script or a function when it is executed. Arguments passed to the script are stored automatically in variables like $1 (first argument), $2 (second argument), etc. We will use the first argument ($1) for our protein ID.
 
-For example, you can define variables as the arguments of a script like this: 
+For example, you can define variables as the arguments of a script called `example.sh` like this: 
 
 ```bash
 #!/usr/bin/env bash
 
 VAR1="$1"
 VAR2="$2"
+
+echo "${VAR1} and the ${VAR2}"
 ```
 
-Use this example to define the variable `PROTEIN_ID` as the first argument your script accepts. 
+Then, you can run this script by using the command `bash example.sh Alvin Chipmunks`. Note, arguments are always separated by white spaces!  
+
+#### Exercise 4.1: Protein ID as Argument
+
+Create a new bash script called `protein_downloader.sh` and make sure it's executable. Add the shebang line and define the variable `PROTEIN_ID` in the script as the first argument your script accepts. Print the value of this variable to the command line output. Run the script to test that it works properly. 
 
 ### Part 4: Download the FASTA file from UniProt
 
-We can use the command `wget` to download a file from the internet and sive it to your local machine. If you'd like, you can use `man` to see a more detailed description of what `wget` does. 
+We can use the command `wget` to download a file from the internet and save it to your local machine. If you'd like, you can use `man` to see a more detailed description of what `wget` does. 
 
 The URL to download e.g. the protein sequence for human hemoglobin subunit beta is https://rest.uniprot.org/uniprotkb/P68871.fasta. 
 
-**Do it yourself:** Write a bash command in your script using `wget` to download any given protein from Uniprot. Remember, we can embed variables in a string using the `"Welcome to ${VAR1}s workshop"` syntax. 
+**Do it yourself:** Extend your `protein_downloader.sh` script by using `wget` to download any given protein ID from Uniprot. Remember, we can embed variables in a string using the `"Welcome to ${VAR1}s workshop"` syntax. 
 
 
 **Test the Download:** Run the script with the human P53 tumor suppressor protein ID (P04637):
 
 ```bash
-bash prot_seq_tool.sh P04637
+bash protein_downloader.sh P04637
 ```
 
 Check your work with `ls`! A file called P04637.fasta should now be in your directory.
@@ -82,7 +90,7 @@ If you want, you can inspect the contents of this FASTA file using commands like
 
 ### Part 5: Amino Acid Composition
 
-Now it's starting to get more complex! We want to read the downloaded FASTA file and automatically output some key aspects our sequence, like the sequence length. 
+Now it's starting to get more complex. We want to read the downloaded FASTA file and automatically output some key aspects our sequence, like the sequence length. 
 
 First, let's introduce some Bash tools that you may need in the following exercises. 
 
@@ -175,7 +183,12 @@ done
 
 ### Exercise 5.1: 
 
-1. Print only the header of the FASTA file. 
+Set up a new bash script for this exercise, call it e.g. `fasta_summary.sh` and make sure it's executable and has the Shebang line. Then, extend your script to add each of the following functionalities one after the other. 
+
+Make sure to test your script for the correct expected behaviour after each step! 
+
+0. Set up the script to accept the path to the fasta file as the first argument and save it to a variable. 
+1. Print only the header of the FASTA file. (Hint: use the while loop that reads a file line by line shown above, and inside of it check if the line starts with the character ">".)
 2. Print the length of the sequence. Make sure your outputs are understandable, like `sequence_length: 11`
 3. Add another argument to accept a specific amino acid character and output how many times that amino acid occurs in the sequence. 
 4. **Challenge:** Output the amino acid composition of the sequence, i.e. the number of occurences of each amino acid in the sequence. Think about using arrays; you may have to use more than one! 
@@ -191,6 +204,8 @@ Instead of using complex loops, we will use a series of commands connected by th
 If you want to try to solve this yourself, do not scroll below this line! I've provided a solution and a breakdown of what each command is doing below. 
 
 Hint: You'll need commands we haven't used before here. Google is your friend! 
+
+**Top tip:** You've probably realized by now that there's way too many individual bash commands to memorize all of them. In reality, you'll find you always gravitate to the same few powerful ones. My tip would be to practice using `grep` and, if you fancy a challenge, also `awk`. These two are incredibly powerful in working with structured (or unstructured) files within the command line, and can save you a lot of time.  
 
 
 ------------
@@ -227,8 +242,3 @@ What's happening in the pipeline?
 
 Well that is a nice and short script, right? Being familiar with Bash commands can indeed make your life that much easier. 
 
-
-TODO: 
-
-Add How to Install WSL for Windows
-Add Intro to HPC Resources

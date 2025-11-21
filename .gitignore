@@ -3,3 +3,6 @@ P68871.fasta
 tester.sh
 fasta_processor.sh
 .DS_Store
+aa_counter_loops.sh
+aa_counter_pipes.sh
+P04637.fasta

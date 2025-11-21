@@ -6,3 +6,4 @@ fasta_processor.sh
 aa_counter_loops.sh
 aa_counter_pipes.sh
 P04637.fasta
+fastafile.fa

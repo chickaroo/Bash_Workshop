@@ -73,6 +73,13 @@ Create a new bash script called `protein_downloader.sh` and make sure it's execu
 
 We can use the command `wget` to download a file from the internet and save it to your local machine. If you'd like, you can use `man` to see a more detailed description of what `wget` does. 
 
+Alternatively, use `curl` to download the contents. They are automatically printed to the command line output. You can save the contents to a specified file by using the `-o` flag: 
+
+```bash
+curl -o P68871.fasta https://rest.uniprot.org/uniprotkb/P68871.fasta
+```
+will download the P68871 FASTA contents to a new file named `P68871.fasta` in your current directory. 
+
 The URL to download e.g. the protein sequence for human hemoglobin subunit beta is https://rest.uniprot.org/uniprotkb/P68871.fasta. 
 
 **Do it yourself:** Extend your `protein_downloader.sh` script by using `wget` to download any given protein ID from Uniprot. Remember, we can embed variables in a string using the `"Welcome to ${VAR1}s workshop"` syntax. 
